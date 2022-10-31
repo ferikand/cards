@@ -18,11 +18,13 @@ function clearCard() {
     child.innerHTML = "";
   }
   whoWin.innerHTML = "Game Of War";
+  computerScoreEl.textContent = computerScore;
+  myScoreEl.textContent = myScore;
 }
 
 async function newDeck() {
-  computerScoreEl.textContent = "0";
-  myScoreEl.textContent = "0";
+  computerScore = 0;
+  myScore = 0;
   drawCardBtn.disabled = false;
   clearCard();
   const res = await fetch(
