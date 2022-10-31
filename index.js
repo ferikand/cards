@@ -20,17 +20,18 @@ function clearCard() {
   whoWin.innerHTML = "Game Of War";
 }
 
-function newDeck() {
+async function newDeck() {
   computerScoreEl.textContent = "0";
   myScoreEl.textContent = "0";
   drawCardBtn.disabled = false;
   clearCard();
-  fetch("https://apis.scrimba.com/deckofcards/api/deck/new/shuffle/")
-    .then((res) => res.json())
-    .then((data) => {
-      deckId = data.deck_id;
-      displayRemainingCards(data);
-    });
+  const res = await fetch(
+    "https://apis.scrimba.com/deckofcards/api/deck/new/shuffle/"
+  );
+  const data = await res.json();
+
+  deckId = data.deck_id;
+  displayRemainingCards(data);
 }
 newDeck();
 
@@ -81,21 +82,20 @@ function determineCardWinner(data) {
   }
 }
 
-function drawCard() {
-  fetch(`https://apis.scrimba.com/deckofcards/api/deck/${deckId}/draw/?count=2`)
-    .then((res) => res.json())
-    .then((data) => {
-      // console.log(data.remaining);
-      data.cards.forEach((card, i) => {
-        // console.log(card.value);
-        cardContainer.children[i].innerHTML = `
-      <img src="${card.image}" class='card' alt="card" />
-      `;
-      });
+async function drawCard() {
+  const res = await fetch(
+    `https://apis.scrimba.com/deckofcards/api/deck/${deckId}/draw/?count=2`
+  );
+  const data = await res.json();
 
-      displayRemainingCards(data);
-      determineCardWinner(data);
-    });
+  data.cards.forEach((card, i) => {
+    cardContainer.children[i].innerHTML = `
+<img src="${card.image}" class='card' alt="card" />
+`;
+  });
+
+  displayRemainingCards(data);
+  determineCardWinner(data);
 }
 
 newDeckBtn.addEventListener("click", newDeck);
